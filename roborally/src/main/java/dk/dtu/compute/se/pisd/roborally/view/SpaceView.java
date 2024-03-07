@@ -31,6 +31,9 @@ import javafx.scene.shape.Circle;
 import javafx.scene.shape.Polygon;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.StrokeLineCap;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
+import javafx.scene.text.Text;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -92,6 +95,7 @@ public class SpaceView extends StackPane implements ViewObserver {
     }
 
     @Override
+    //meget vigtig ift at opdatere view og instanser i spillet
     public void updateView(Subject subject) {
         if (subject == this.space) {
             updatePlayer();
@@ -101,55 +105,58 @@ public class SpaceView extends StackPane implements ViewObserver {
         }
     }
 
+
     private void addCheckpoints(Space space) {
         Checkpoint checkpoint = space.getCheckpoint();
 
         if (checkpoint != null) {
+            Text text;
+            Circle circle;
 
-            int Checkponitnumber =space.getCheckpoint().getCheckpointnumber();
-            switch (Checkponitnumber) {
-                case 1 -> {
-                    Circle circle = new Circle(10, 10, 10);
-                    circle.setFill(Color.YELLOW);
-                    this.getChildren().add(circle);
+            switch (checkpoint.getCheckpointnumber()) {
+                case 1:
+                    circle = new Circle(10, 10, 10, Color.DARKORANGE);
+                    text = new Text("1");
                     break;
-                }
-                case 2 -> {
-                    Circle circle1 = new Circle(10, 10, 10);
-                    circle1.setFill(Color.AQUA);
-                    this.getChildren().add(circle1);
+                case 2:
+                    circle = new Circle(10, 10, 10, Color.DARKORANGE);
+                    text = new Text("2");
                     break;
-                }
-                case 3 -> {
-                    Circle circle2 = new Circle(10, 10, 10);
-                    circle2.setFill(Color.RED);
-                    this.getChildren().add(circle2);
+                case 3:
+                    circle = new Circle(10, 10, 10, Color.DARKORANGE);
+                    text = new Text("3");
                     break;
-                }
-                case 4 -> {
-                    Circle circle3 = new Circle(10, 10, 10);
-                    circle3.setFill(Color.BROWN);
-                    this.getChildren().add(circle3);
+                case 4:
+                    circle = new Circle(10, 10, 10, Color.DARKORANGE);
+                    text = new Text("4");
                     break;
-                }
-                case 5 -> {
-                    Circle circle4 = new Circle(10, 10, 10);
-                    circle4.setFill(Color.DARKGREY);
-                    this.getChildren().add(circle4);
+                case 5:
+                    circle = new Circle(10, 10, 10, Color.DARKORANGE);
+                    text = new Text("5");
                     break;
-                }
-                case 6 -> {
-                    Circle circle5 = new Circle(10, 10, 10);
-                    circle5.setFill(Color.PURPLE);
-                    this.getChildren().add(circle5);
+                case 6:
+                    circle = new Circle(10, 10, 10, Color.DARKORANGE);
+                    text = new Text("6");
                     break;
-                }
+                default:
+                    return; // Ingen checkpoint, derfor tilføjer vi ikke noget
             }
+            // Sætter skrifttypen til sort, fed, størrelse 20
+            text.setFont(Font.font("Black", FontWeight.BOLD, 15));
+            // Opretter en StackPane for at kombinere circle og text visuelt
+            //stack er javeFx, hvor man kan sætte tekst oven på en cirkel
+            StackPane stack = new StackPane();
+            stack.getChildren().addAll(circle, text); // Tilføjer cirkel og tekst til stack
 
+            // Centrerer stack på den angivne plads
+            stack.setLayoutX(space.x * SPACE_WIDTH + SPACE_WIDTH / 2);
+            stack.setLayoutY(space.y * SPACE_HEIGHT + SPACE_HEIGHT / 2);
+
+            this.getChildren().add(stack); // Tilføjer stack til dette view
 
         }
-
     }
+
 
 
     public void addwall(Space space) {

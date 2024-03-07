@@ -56,6 +56,8 @@ public class Space extends Subject {
     }
     public void movePlayer(Space space, GameController gameController, Board board){
 
+
+
     }
     public Conveyerbelt getConveyerbelt() {
         return conveyerbelt;
@@ -119,6 +121,9 @@ public class Space extends Subject {
             }
             notifyChange();
         }
+
+
+
     }
 
     void playerChanged() {

@@ -142,18 +142,15 @@ public class GameController {
     public void executePrograms() {
         board.setStepMode(false);
         continuePrograms();
-        ///setStepmode bruges, så vi kan gøre brug af executeNextSTep metoden, og vi behøver ikke kopiere den ind flere gange
-        //SÅ vi skal putte den på True eller False, også køre vi løkken. Hvis den er på true kører den metoden,
-        // men hvis vi skriver false så kører den ikke metoden.
+        //seStepmode er på false, fordi vi skal kører programmet og de rikke behov for step
     }
 
     // XXX: V2
     public void executeStep() {
         board.setStepMode(true);
         continuePrograms();
-        ///setStepmode bruges, så vi kan gøre brug af executeNextSTep metoden, og vi behøver ikke kopiere den ind flere gange
-        //SÅ vi skal putte den på True eller False, også køre vi løkken. Hvis den er på true kører den metoden,
-        // men hvis vi skriver false så kører den ikke metoden.
+        //setAStepmode er true her, fordi vi er i stepmode i denne tilfælde
+
     }
 
     // XXX: V2
