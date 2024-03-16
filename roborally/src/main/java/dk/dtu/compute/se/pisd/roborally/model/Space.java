@@ -22,7 +22,12 @@
 package dk.dtu.compute.se.pisd.roborally.model;
 
 import dk.dtu.compute.se.pisd.designpatterns.observer.Subject;
+import dk.dtu.compute.se.pisd.roborally.controller.FieldAction;
 import dk.dtu.compute.se.pisd.roborally.controller.GameController;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 /**
  * ...
@@ -31,7 +36,6 @@ import dk.dtu.compute.se.pisd.roborally.controller.GameController;
  *
  */
 public class Space extends Subject {
-
     public final Board board;
 
     public final int x;
@@ -43,26 +47,26 @@ public class Space extends Subject {
     private Checkpoint checkpoint;
     private boolean CheckpointBool;
 
+    private List<Heading> walls = new ArrayList<>();
+    private List<FieldAction> actions = new ArrayList<>();
 
 
-
-
-    public Checkpoint getCheckpoint(){
+    public Checkpoint getCheckpoint() {
         return checkpoint;
     }
 
     public Wall getWall() {
         return wall;
     }
-    public void movePlayer(Space space, GameController gameController, Board board){
 
+    public void movePlayer(Space space, GameController gameController, Board board) {
 
 
     }
+
     public Conveyerbelt getConveyerbelt() {
         return conveyerbelt;
     }
-
 
 
     public void setConveyerbelt(Conveyerbelt conveyerbelt) {
@@ -78,8 +82,8 @@ public class Space extends Subject {
         Wall oldwall = this.wall;
 
         if (wall != oldwall &&
-                ( wall == null || board == wall.board))  {
-            this.wall = wall ;
+                (wall == null || board == wall.board)) {
+            this.wall = wall;
             if (oldwall != null) {
                 // this should actually not happen
                 oldwall.setSpace(null);
@@ -107,6 +111,7 @@ public class Space extends Subject {
     public Player getPlayer() {
         return player;
     }
+
     public void setPlayer(Player player) {
         Player oldPlayer = this.player;
         if (player != oldPlayer &&
@@ -121,7 +126,8 @@ public class Space extends Subject {
             }
             notifyChange();
         }
-
+        
+        
 
 
     }
@@ -133,4 +139,14 @@ public class Space extends Subject {
         notifyChange();
     }
 
+    public Collection<FieldAction> getActions() {
+        return actions;
+    }
+
+    public Collection<Heading> getWalls() {
+        return walls;
+    }
+    // skal måske ændres
+    public void addwall(Heading wall) {
+    }
 }

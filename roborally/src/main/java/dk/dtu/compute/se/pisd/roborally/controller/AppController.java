@@ -24,8 +24,10 @@ package dk.dtu.compute.se.pisd.roborally.controller;
 import dk.dtu.compute.se.pisd.designpatterns.observer.Observer;
 import dk.dtu.compute.se.pisd.designpatterns.observer.Subject;
 
+
 import dk.dtu.compute.se.pisd.roborally.RoboRally;
 
+import dk.dtu.compute.se.pisd.roborally.fileacces.LoadBoard;
 import dk.dtu.compute.se.pisd.roborally.model.*;
 
 import javafx.application.Platform;
@@ -52,6 +54,9 @@ AppController implements Observer {
 
     final private List<Integer> PLAYER_NUMBER_OPTIONS = Arrays.asList(2, 3, 4, 5, 6);
     final private List<String> PLAYER_COLORS = Arrays.asList("red", "green", "blue", "orange", "grey", "magenta");
+    //Ny kode relevant ift JSON
+    final private List<String> BOARD_OPTIONS = Arrays.asList("Board 1","Board 2");
+
 
     final private RoboRally roboRally;
 
@@ -67,18 +72,26 @@ AppController implements Observer {
         dialog.setHeaderText("Select number of players");
         Optional<Integer> result = dialog.showAndWait();
 
+        ChoiceDialog<String> dialog2 = new ChoiceDialog<>(BOARD_OPTIONS.get(0), BOARD_OPTIONS);
+        dialog2.setTitle("Choice of board");
+        dialog2.setHeaderText("Select board");
+        Optional<String> result2 = dialog2.showAndWait();
+
+        String boardResult= String.valueOf(result2);
+
+
         if (result.isPresent()) {
             if (gameController != null) {
-                // The UI should not allow this, but in case this happens anyway.
-                // give the user the option to save the game or abort this operation!
+
                 if (!stopGame()) {
                     return;
                 }
             }
 
-            // XXX the board should eventually be created programmatically or loaded from a file
-            //     here we just create an empty board with the required number of players.
-            Board board = new Board(8,8);
+            Board board = LoadBoard.loadBoard(boardResult);
+            System.out.println(boardResult);
+
+
             gameController = new GameController(board);
             int no = result.get();
             for (int i = 0; i < no; i++) {
@@ -92,17 +105,17 @@ AppController implements Observer {
             Wall wall1 = new Wall(SOUTH, board);
             Wall wall2 = new Wall(NORTH, board);
             Wall wall3 = new Wall(EAST, board);
-            Wall wall4 = new Wall(WEST,board);
+            Wall wall4 = new Wall(WEST, board);
 
             board.addwall(wall1);
             board.addwall(wall2);
             board.addwall(wall3);
             board.addwall(wall4);
 
-            wall1.setSpace(board.getSpace(3,2));
-            wall2.setSpace(board.getSpace(7,2));
-            wall3.setSpace(board.getSpace(5,3));
-            wall4.setSpace(board.getSpace(1,7));
+            wall1.setSpace(board.getSpace(3, 2));
+            wall2.setSpace(board.getSpace(7, 2));
+            wall3.setSpace(board.getSpace(5, 3));
+            wall4.setSpace(board.getSpace(1, 7));
            /* Space space =new Space(board,3,2);
             Space space1 =new Space(board,7,2);
             Space space2 =new Space(board,5,3);
@@ -116,21 +129,19 @@ AppController implements Observer {
             */
 
 
-
             Conveyerbelt conveyerbelt1 = new Conveyerbelt();
             board.addConveyerbelt(conveyerbelt1);
             conveyerbelt1.setHeading(WEST);
-            conveyerbelt1.setSpace(board.getSpace(1,3));
-            Space space4 = board.getSpace(1,3);
+            conveyerbelt1.setSpace(board.getSpace(1, 3));
+            Space space4 = board.getSpace(1, 3);
             space4.setConveyerbelt(conveyerbelt1);
 
             Conveyerbelt conveyerbelt2 = new Conveyerbelt();
             board.addConveyerbelt(conveyerbelt2);
             conveyerbelt2.setHeading(NORTH);
-            conveyerbelt2.setSpace(board.getSpace(4,6));
-            Space space6 = board.getSpace(4,6);
+            conveyerbelt2.setSpace(board.getSpace(4, 6));
+            Space space6 = board.getSpace(4, 6);
             space6.setConveyerbelt(conveyerbelt2);
-
 
 
             Checkpoint checkpoint1 = new Checkpoint();
@@ -151,28 +162,24 @@ AppController implements Observer {
             board.addCheckpoint(checkpoint4);
             board.addCheckpoint(checkpoint5);
             board.addCheckpoint(checkpoint6);
-            checkpoint1.setSpace(board.getSpace(0,1));
-            checkpoint2.setSpace(board.getSpace(2,5));
-            checkpoint3.setSpace(board.getSpace(7,7));
-            checkpoint4.setSpace(board.getSpace(4,1));
-            checkpoint5.setSpace(board.getSpace(0,6));
-            checkpoint6.setSpace(board.getSpace(2,7));
-            Space space1c = board.getSpace(0,1);
-            Space space2c = board.getSpace(2,5);
-            Space space3c = board.getSpace(7,7);
-            Space space4c = board.getSpace(4,1);
-            Space space5c = board.getSpace(0,6);
-            Space space6c = board.getSpace(2,7);
+            checkpoint1.setSpace(board.getSpace(0, 1));
+            checkpoint2.setSpace(board.getSpace(2, 5));
+            checkpoint3.setSpace(board.getSpace(7, 7));
+            checkpoint4.setSpace(board.getSpace(4, 1));
+            checkpoint5.setSpace(board.getSpace(0, 6));
+            checkpoint6.setSpace(board.getSpace(2, 7));
+            Space space1c = board.getSpace(0, 1);
+            Space space2c = board.getSpace(2, 5);
+            Space space3c = board.getSpace(7, 7);
+            Space space4c = board.getSpace(4, 1);
+            Space space5c = board.getSpace(0, 6);
+            Space space6c = board.getSpace(2, 7);
             space1c.setCheckpoint(checkpoint1);
             space2c.setCheckpoint(checkpoint2);
             space3c.setCheckpoint(checkpoint3);
             space4c.setCheckpoint(checkpoint4);
             space5c.setCheckpoint(checkpoint5);
             space6c.setCheckpoint(checkpoint6);
-
-
-
-
 
 
             // XXX: V2
