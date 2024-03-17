@@ -1,16 +1,28 @@
 {
-  "width": 8,
-  "height": 8,
+  "width": 2,
+  "height": 3,
   "spaces": [
     {
+      "actions": [
+        {
+          "CLASSNAME": "dk.dtu.compute.se.pisd.roborally.controller.Walls",
+          "INSTANCE": {
+            "heading": "NORTH"
+          }
+        }
+      ],
+      "x": 4,
+      "y": 3
+    },
+    {
       "walls": [
-        "SOUTH"
+        "EAST"
       ],
       "actions": [
         {
           "CLASSNAME": "dk.dtu.compute.se.pisd.roborally.controller.ConveyorBelt",
           "INSTANCE": {
-            "heading": "WEST"
+            "heading": "EAST"
           }
         }
       ],
@@ -19,7 +31,7 @@
     },
     {
       "walls": [
-        "NORTH"
+        "SOUTH"
       ],
       "actions": [
         {

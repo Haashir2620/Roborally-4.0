@@ -150,3 +150,7 @@ public class Space extends Subject {
     public void addwall(Heading wall) {
     }
 }
+
+
+
+

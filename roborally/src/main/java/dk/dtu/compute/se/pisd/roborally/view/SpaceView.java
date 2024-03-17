@@ -158,7 +158,6 @@ public class SpaceView extends StackPane implements ViewObserver {
     }
 
 
-
     public void addwall(Space space) {
 
 
@@ -218,100 +217,57 @@ public class SpaceView extends StackPane implements ViewObserver {
     }
 
 
-
-
-
-
-
-
-
-
-
-    public void addConveyerbelt () {
+    public void addConveyerbelt() {
         Conveyerbelt conveyerbelt = space.getConveyerbelt();
         if (conveyerbelt != null) {
-            Heading heading = space.getConveyerbelt().getHeading();
+            Heading heading = conveyerbelt.getHeading();
+            // Justerer størrelsen på pilen til at være mindre end firkanten
+            double arrowBase = 25; // Bredde af pilens base
+            double arrowHeight = 25 * 0.6; // Højden af pilen
+            Color arrowColor = Color.YELLOW; // Farve for pilen
+
+            // Beregner offset for at centrere pilen i firkanten
+            double offsetX = (35 - arrowBase) / 2;
+            double offsetY = (35 - arrowHeight) / 2;
+
             switch (heading) {
                 case NORTH: {
-                    Rectangle rectangleN = new Rectangle(35, 35);
-                    rectangleN.setStroke(Color.RED);
-                    this.getChildren().add(rectangleN);
-                    Polygon arrowN = new Polygon(0.0, 0.0,
-                            17.5, 35.0,
-                            35.0, 0.0);
-                    try {
-                        arrowN.setFill(Color.valueOf("YELLOW"));
-                    } catch (Exception e) {
-                        arrowN.setFill(Color.YELLOW);
-                    }
-
-                    arrowN.setRotate(180);
+                    Polygon arrowN = new Polygon(
+                            arrowBase / 2.0 + offsetX, offsetY,
+                            offsetX, arrowHeight + offsetY,
+                            arrowBase + offsetX, arrowHeight + offsetY);
+                    arrowN.setFill(arrowColor);
                     this.getChildren().add(arrowN);
                     break;
                 }
-
                 case EAST: {
-                    Rectangle rectangleE = new Rectangle(35, 35);
-                    rectangleE.setStroke(Color.RED);
-                    this.getChildren().add(rectangleE);
-                    Polygon arrowE = new Polygon(0.0, 0.0,
-                            17.5, 35.0,
-                            35.0, 0.0);
-                    try {
-                        arrowE.setFill(Color.valueOf("YELLOW"));
-                    } catch (Exception e) {
-                        arrowE.setFill(Color.YELLOW);
-                    }
-
-                    arrowE.setRotate(270);
+                    Polygon arrowE = new Polygon(
+                            offsetX, arrowBase / 2.0 + offsetY,
+                            arrowHeight + offsetX, offsetY,
+                            arrowHeight + offsetX, arrowBase + offsetY);
+                    arrowE.setFill(arrowColor);
                     this.getChildren().add(arrowE);
                     break;
                 }
-
                 case SOUTH: {
-                    Rectangle rectangleS = new Rectangle(35, 35);
-                    rectangleS.setStroke(Color.RED);
-                    this.getChildren().add(rectangleS);
-                    Polygon arrowS = new Polygon(0.0, 0.0,
-                            17.5, 35.0,
-                            35.0, 0.0);
-                    try {
-                        arrowS.setFill(Color.valueOf("YELLOW"));
-                    } catch (Exception e) {
-                        arrowS.setFill(Color.YELLOW);
-                    }
-
-                    arrowS.setRotate(0);
+                    Polygon arrowS = new Polygon(
+                            arrowBase / 2.0 + offsetX, arrowHeight + offsetY,
+                            arrowBase + offsetX, offsetY,
+                            offsetX, offsetY);
+                    arrowS.setFill(arrowColor);
                     this.getChildren().add(arrowS);
                     break;
                 }
-
                 case WEST: {
-                    Rectangle rectangleW = new Rectangle(35, 35);
-                    rectangleW.setStroke(Color.RED);
-                    this.getChildren().add(rectangleW);
-                    Polygon arrowW = new Polygon(0.0, 0.0,
-                            17.5, 35.0,
-                            35.0, 0.0);
-                    try {
-                        arrowW.setFill(Color.valueOf("YELLOW"));
-                    } catch (Exception e) {
-                        arrowW.setFill(Color.YELLOW);
-                    }
-
-                    arrowW.setRotate(90);
+                    Polygon arrowW = new Polygon(
+                            arrowHeight + offsetX, arrowBase / 2.0 + offsetY,
+                            offsetX, arrowBase + offsetY,
+                            offsetX, offsetY);
+                    arrowW.setFill(arrowColor);
                     this.getChildren().add(arrowW);
                     break;
                 }
             }
-
-
-
         }
     }
 }
-
-
-
-
-

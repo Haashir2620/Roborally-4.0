@@ -246,7 +246,7 @@ public class Board extends Subject {
         // XXX: V2 changed the status so that it shows the phase, the current player and the number of steps
         return "Phase: " + getPhase().name() +
                 ", Player = " + getCurrentPlayer().getName() +
-                ", AntalSlag = " + getMoveCounter() +", Checkpoints = " + getCurrentPlayer().getCheckpointValue();
+                ", AntalSlag = " + getMoveCounter() + ", Checkpoints = " + getCurrentPlayer().getCheckpointValue();
 
 
     }
@@ -258,8 +258,9 @@ public class Board extends Subject {
         }
 
     }
-    public void addConveyerbelt(@NotNull Conveyerbelt conveyerbelt){
-        if(Conveyerbelt.Space == this && !conveyerbelts.contains(conveyerbelt)){
+
+    public void addConveyerbelt(@NotNull Conveyerbelt conveyerbelt) {
+        if (Conveyerbelt.Space == this && !conveyerbelts.contains(conveyerbelt)) {
             conveyerbelts.add(conveyerbelt);
             notifyChange();
         }
@@ -270,4 +271,5 @@ public class Board extends Subject {
             checkpoints.add(checkpoint);
         notifyChange();
     }
-    }
+
+}

@@ -22,7 +22,7 @@ import java.io.*;
 public class LoadBoard {
 
     private static final String BOARDSFOLDER = "boards";
-    private static final String DEFAULTBOARD = "defaultboard";
+    private static final String DEFAULTBOARD = "defaultboard" +"defaultboard2";
     private static final String JSON_EXT = "json";
 
     public static Board loadBoard(String boardname) {

@@ -129,19 +129,44 @@ AppController implements Observer {
             */
 
 
+            // Opretter og placerer det første conveyerbelt
             Conveyerbelt conveyerbelt1 = new Conveyerbelt();
+            conveyerbelt1.setHeading(Heading.WEST); // Retningen for dette conveyerbelt
+            conveyerbelt1.setSpace(board.getSpace(1, 3)); // række 1, kolonne 3
             board.addConveyerbelt(conveyerbelt1);
-            conveyerbelt1.setHeading(WEST);
-            conveyerbelt1.setSpace(board.getSpace(1, 3));
-            Space space4 = board.getSpace(1, 3);
-            space4.setConveyerbelt(conveyerbelt1);
+            Space space1 = board.getSpace(1, 3); // Gemmer referencen til Space
+            space1.setConveyerbelt(conveyerbelt1); // Sætter conveyerbeltet på Space
 
+// Opretter og placerer det andet conveyerbelt
             Conveyerbelt conveyerbelt2 = new Conveyerbelt();
-            board.addConveyerbelt(conveyerbelt2);
-            conveyerbelt2.setHeading(NORTH);
+            conveyerbelt2.setHeading(Heading.NORTH);
             conveyerbelt2.setSpace(board.getSpace(4, 6));
-            Space space6 = board.getSpace(4, 6);
-            space6.setConveyerbelt(conveyerbelt2);
+            Space space2 = board.getSpace(4, 6);
+            space2.setConveyerbelt(conveyerbelt2);
+
+// Opretter og placerer det tredje conveyerbelt
+            Conveyerbelt conveyerbelt3 = new Conveyerbelt();
+            conveyerbelt3.setHeading(Heading.EAST);
+            conveyerbelt3.setSpace(board.getSpace(2, 4));
+            board.addConveyerbelt(conveyerbelt3);
+            Space space3 = board.getSpace(2, 4);
+            space3.setConveyerbelt(conveyerbelt3);
+
+// Opretter og placerer det fjerde conveyerbelt
+            Conveyerbelt conveyerbelt4 = new Conveyerbelt();
+            conveyerbelt4.setHeading(Heading.SOUTH);
+            conveyerbelt4.setSpace(board.getSpace(3, 7));
+            board.addConveyerbelt(conveyerbelt4);
+            Space space4 = board.getSpace(3, 7);
+            space4.setConveyerbelt(conveyerbelt4);
+
+// Opretter og placerer det femte conveyerbelt
+            Conveyerbelt conveyerbelt5 = new Conveyerbelt();
+            conveyerbelt5.setHeading(Heading.WEST);
+            conveyerbelt5.setSpace(board.getSpace(5, 2));
+            board.addConveyerbelt(conveyerbelt5);
+            Space space5 = board.getSpace(5, 2);
+            space5.setConveyerbelt(conveyerbelt5);
 
 
             Checkpoint checkpoint1 = new Checkpoint();
