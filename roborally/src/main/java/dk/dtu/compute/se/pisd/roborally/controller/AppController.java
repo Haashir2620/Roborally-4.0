@@ -102,31 +102,47 @@ AppController implements Observer {
             }
 
 
-            Wall wall1 = new Wall(SOUTH, board);
-            Wall wall2 = new Wall(NORTH, board);
-            Wall wall3 = new Wall(EAST, board);
-            Wall wall4 = new Wall(WEST, board);
+            // Tilføjer vægge til brættet
+            Wall wall1 = new Wall(Heading.SOUTH, board);
+            Wall wall2 = new Wall(Heading.NORTH, board);
+            Wall wall3 = new Wall(Heading.EAST, board);
+            Wall wall4 = new Wall(Heading.WEST, board);
+            Wall wall5 = new Wall(Heading.SOUTH, board);
+            Wall wall6 = new Wall(Heading.NORTH, board);
+            Wall wall7 = new Wall(Heading.EAST, board);
+            Wall wall8 = new Wall(Heading.WEST, board);
+            Wall wall9 = new Wall(Heading.SOUTH, board);
+            Wall wall10 = new Wall(Heading.NORTH, board);
+            Wall wall11 = new Wall(Heading.EAST, board);
+            Wall wall12 = new Wall(Heading.WEST, board);
 
             board.addwall(wall1);
             board.addwall(wall2);
             board.addwall(wall3);
             board.addwall(wall4);
+            board.addwall(wall5);
+            board.addwall(wall6);
+            board.addwall(wall7);
+            board.addwall(wall8);
+            board.addwall(wall9);
+            board.addwall(wall10);
+            board.addwall(wall11);
+            board.addwall(wall12);
 
-            wall1.setSpace(board.getSpace(3, 2));
-            wall2.setSpace(board.getSpace(7, 2));
-            wall3.setSpace(board.getSpace(5, 3));
-            wall4.setSpace(board.getSpace(1, 7));
-           /* Space space =new Space(board,3,2);
-            Space space1 =new Space(board,7,2);
-            Space space2 =new Space(board,5,3);
-            Space space3 =new Space(board,1,7);
+// Placeringer af vægge
+            wall1.setSpace(board.getSpace(0, 0));
+            wall2.setSpace(board.getSpace(1, 1));
+            wall3.setSpace(board.getSpace(0, 2));
+            wall4.setSpace(board.getSpace(2, 1));
+            wall5.setSpace(board.getSpace(2, 3));
+            wall6.setSpace(board.getSpace(3, 3));
+            wall7.setSpace(board.getSpace(3, 4));
+            wall8.setSpace(board.getSpace(3, 5));
+            wall9.setSpace(board.getSpace(4, 4));
+            wall10.setSpace(board.getSpace(5, 4));
+            wall11.setSpace(board.getSpace(5, 2));
+            wall12.setSpace(board.getSpace(5, 3));
 
-
-            //space.setWall(wall1);
-            //space1.setWall(wall2);
-            //space2.setWall(wall3);
-            //space3.setWall(wall4)
-            */
 
 
             // Opretter og placerer det første conveyerbelt

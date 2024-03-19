@@ -115,27 +115,27 @@ public class SpaceView extends StackPane implements ViewObserver {
 
             switch (checkpoint.getCheckpointnumber()) {
                 case 1:
-                    circle = new Circle(10, 10, 10, Color.DARKORANGE);
+                    circle = new Circle(10, 10, 10, Color.GREENYELLOW);
                     text = new Text("1");
                     break;
                 case 2:
-                    circle = new Circle(10, 10, 10, Color.DARKORANGE);
+                    circle = new Circle(10, 10, 10, Color.GREENYELLOW);
                     text = new Text("2");
                     break;
                 case 3:
-                    circle = new Circle(10, 10, 10, Color.DARKORANGE);
+                    circle = new Circle(10, 10, 10, Color.GREENYELLOW);
                     text = new Text("3");
                     break;
                 case 4:
-                    circle = new Circle(10, 10, 10, Color.DARKORANGE);
+                    circle = new Circle(10, 10, 10, Color.GREENYELLOW);
                     text = new Text("4");
                     break;
                 case 5:
-                    circle = new Circle(10, 10, 10, Color.DARKORANGE);
+                    circle = new Circle(10, 10, 10, Color.GREENYELLOW);
                     text = new Text("5");
                     break;
                 case 6:
-                    circle = new Circle(10, 10, 10, Color.DARKORANGE);
+                    circle = new Circle(10, 10, 10, Color.GREENYELLOW);
                     text = new Text("6");
                     break;
                 default:
@@ -224,7 +224,7 @@ public class SpaceView extends StackPane implements ViewObserver {
             // Justerer størrelsen på pilen til at være mindre end firkanten
             double arrowBase = 25; // Bredde af pilens base
             double arrowHeight = 25 * 0.6; // Højden af pilen
-            Color arrowColor = Color.YELLOW; // Farve for pilen
+            Color arrowColor = Color.ORANGE; // Farve for pilen
 
             // Beregner offset for at centrere pilen i firkanten
             double offsetX = (35 - arrowBase) / 2;

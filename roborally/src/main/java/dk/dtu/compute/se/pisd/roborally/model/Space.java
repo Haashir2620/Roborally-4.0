@@ -149,6 +149,14 @@ public class Space extends Subject {
     // skal måske ændres
     public void addwall(Heading wall) {
     }
+
+    public int getX() {
+        return x;
+    }
+
+    public int getY() {
+        return y;
+    }
 }
 
 

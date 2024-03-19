@@ -43,39 +43,62 @@ public class GameController {
      * happening on the board. This method should eventually be deleted!
      *
      * @param space the space to which the current player should move
+     * @author s224558
      */
 
     public void moveCurrentPlayerToSpace(@NotNull Space space) {
-
-        // TODO Assignment V1: method should be implemented by the students:
-        //   - the current player should be moved to the given space
-        //     (if it is free()
-        //   - and the current player should be set to the player
-        //     following the current player
-        //   - the counter of moves in the game should be increased by one
-        //     if and when the player is moved (the counter and the status line
-        //     message needs to be implemented at another place)
-        if (space.getPlayer() == null) {
+            // TODO Assignment V1: method should be implemented by the students:
+            //   - the current player should be moved to the given space
+            //     (if it is free()
+            //   - and the current player should be set to the player
+            //     following the current player
+            //   - the counter of moves in the game should be increased by one
+            //     if and when the player is moved (the counter and the status line
+            //     message needs to be implemented at another place)
             Player currentPlayer = board.getCurrentPlayer();
-            space.setPlayer(currentPlayer);
-            board.setMoveCounter(board.getMoveCounter() + 1);
-            board.getStatusMessage();
-            /**
-             * Ovenfor har brugt metoden setMoveCounter til at sætte den nuværende moveCounter til +1
-             * Og derefter hentet den opdaterede statuslinje med getStatusMessage()
-             */
-            if (board.getPlayerNumber(currentPlayer) == board.getPlayersNumber() - 1) {
-                currentPlayer = board.getPlayer(0);
-                board.setCurrentPlayer(currentPlayer);
-            } else {
-                Player nextCurrentPlayer = currentPlayer;
-                currentPlayer = board.getPlayer(board.getPlayerNumber(nextCurrentPlayer) + 1);
-                board.setCurrentPlayer(currentPlayer);
+            if (currentPlayer == null || space == null) {
+                return;
             }
+
+            Space currentSpace = currentPlayer.getSpace();
+            if (currentSpace == null) {
+                return;
+            }
+
+            if (space.getPlayer() == null) {
+                currentSpace.setPlayer(null);
+                space.setPlayer(currentPlayer);
+                currentPlayer.setSpace(space);
+
+                // Opdaterer spillets bevægelsestæller
+                board.setMoveCounter(board.getMoveCounter() + 1);
+            } else {
+                Space nextSpace = board.getNeighbour(space, currentPlayer.getHeading());
+                // Tjekker, om det er muligt at skubbe den anden spiller
+                if (nextSpace != null && nextSpace.getPlayer() == null) {
+                    // Skubber den anden spiller ind i det næste rum
+                    Player otherPlayer = space.getPlayer();
+                    otherPlayer.setSpace(nextSpace);
+                    nextSpace.setPlayer(otherPlayer);
+
+                    // Flytter den nuværende spiller ind i målrummet
+                    currentSpace.setPlayer(null);
+                    space.setPlayer(currentPlayer);
+                    currentPlayer.setSpace(space);
+
+                    // Opdaterer spillets bevægelsestæller
+                    board.setMoveCounter(board.getMoveCounter() + 1);
+                }
+            }
+
+            // Opdaterer den nuværende spiller til den næste i rækken
+            int currentPlayerIndex = board.getPlayerNumber(currentPlayer);
+            int nextPlayerIndex = (currentPlayerIndex + 1) % board.getPlayersNumber();
+            board.setCurrentPlayer(board.getPlayer(nextPlayerIndex));
         }
 
 
-    }
+
 
     // XXX: V2
     public void startProgrammingPhase() {
@@ -304,13 +327,13 @@ public class GameController {
         Heading heading = player.getHeading();
         Wall wallcurrentspace = space.getWall();
 
-        //Nedunder er ikke V2
 
         if (space != null) {
 
             Space space1 = board.getNeighbour(space, heading);
             Wall wallspacetarget = space1.getWall();
             Heading heading2 = player.getHeading();
+
 
 
             player.setHeading(heading.prev());
@@ -358,6 +381,8 @@ public class GameController {
                         break;
                 }
 
+
+
             }
 
             if (space1 != null && space1.getPlayer() == null) {
@@ -394,7 +419,7 @@ public class GameController {
     // TODO Assignment V2
 
     /**
-     * s224558:
+     *
      * The method moves the current robot 3 spaces forward in the robots current direction.
      * Before moving the robot the method checks if every space is free.
      *
@@ -425,7 +450,7 @@ public class GameController {
     // TODO Assignment V2
 
     /**
-     * s224558
+     *
      * The robots direction turns to the left
      *
      * @param player is the current players robot
@@ -433,7 +458,6 @@ public class GameController {
     public void turnLeft(@NotNull Player player) {
         Heading heading = player.getHeading();
         player.setHeading(heading.prev());
-
 
     }
 
@@ -451,7 +475,7 @@ public class GameController {
     }
 
     /**
-     * @s224558
+     * @author
      * @param player
      */
     public void Move2(@NotNull Player player) {
@@ -459,6 +483,11 @@ public class GameController {
         this.moveForward(player);
 
     }
+
+    /**
+     * @s224558
+     * @param player
+     */
 
     public void moveBack(@NotNull Player player) {
         Heading backDirection = player.getHeading().prev().prev(); // Beregner den modsatte retning
