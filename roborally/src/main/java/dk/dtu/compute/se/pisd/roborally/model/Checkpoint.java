@@ -7,10 +7,11 @@ public class Checkpoint {
 
     private boolean complete;
 
+    //hvilket checkpoint det er i gamecontroller logik
     public int getCheckpointnumber() {
         return checkpointnumber;
     }
-
+    //hvilket checkpoint det er i appcontrolleren
     public void setCheckpointnumber(int checkpointnumber) {
         this.checkpointnumber = checkpointnumber;
     }
@@ -30,6 +31,7 @@ public class Checkpoint {
         return space;
     }
 
+    //hvor checkpoints er placeret
     public void setSpace(Space space) {
         this.space = space;
     }
