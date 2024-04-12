@@ -27,6 +27,9 @@ import dk.dtu.compute.se.pisd.designpatterns.observer.Subject;
 
 import dk.dtu.compute.se.pisd.roborally.RoboRally;
 
+import dk.dtu.compute.se.pisd.roborally.dal.GameInDB;
+import dk.dtu.compute.se.pisd.roborally.dal.IRepository;
+import dk.dtu.compute.se.pisd.roborally.dal.RepositoryAccess;
 import dk.dtu.compute.se.pisd.roborally.fileacces.LoadBoard;
 import dk.dtu.compute.se.pisd.roborally.model.*;
 
@@ -55,7 +58,7 @@ AppController implements Observer {
     final private List<Integer> PLAYER_NUMBER_OPTIONS = Arrays.asList(2, 3, 4, 5, 6);
     final private List<String> PLAYER_COLORS = Arrays.asList("red", "green", "blue", "orange", "grey", "magenta");
     //Ny kode relevant ift JSON
-    final private List<String> BOARD_OPTIONS = Arrays.asList("Board 1","Board 2");
+    final private List<String> BOARD_OPTIONS = Arrays.asList("Board 1", "Board 2");
 
 
     final private RoboRally roboRally;
@@ -77,7 +80,7 @@ AppController implements Observer {
         dialog2.setHeaderText("Select board");
         Optional<String> result2 = dialog2.showAndWait();
 
-        String boardResult= String.valueOf(result2);
+        String boardResult = String.valueOf(result2);
 
 
         if (result.isPresent()) {
@@ -144,7 +147,6 @@ AppController implements Observer {
             wall12.setSpace(board.getSpace(5, 3));
 
 
-
             // Opretter og placerer det første conveyerbelt
             Conveyerbelt conveyerbelt1 = new Conveyerbelt();
             conveyerbelt1.setHeading(Heading.WEST); // Retningen for dette conveyerbelt
@@ -185,42 +187,7 @@ AppController implements Observer {
             space5.setConveyerbelt(conveyerbelt5);
 
 
-            Checkpoint checkpoint1 = new Checkpoint();
-            Checkpoint checkpoint2 = new Checkpoint();
-            Checkpoint checkpoint3 = new Checkpoint();
-            Checkpoint checkpoint4 = new Checkpoint();
-            Checkpoint checkpoint5 = new Checkpoint();
-            Checkpoint checkpoint6 = new Checkpoint();
-            checkpoint1.setCheckpointnumber(1);
-            checkpoint2.setCheckpointnumber(2);
-            checkpoint3.setCheckpointnumber(3);
-            checkpoint4.setCheckpointnumber(4);
-            checkpoint5.setCheckpointnumber(5);
-            checkpoint6.setCheckpointnumber(6);
-            board.addCheckpoint(checkpoint1);
-            board.addCheckpoint(checkpoint2);
-            board.addCheckpoint(checkpoint3);
-            board.addCheckpoint(checkpoint4);
-            board.addCheckpoint(checkpoint5);
-            board.addCheckpoint(checkpoint6);
-            checkpoint1.setSpace(board.getSpace(0, 1));
-            checkpoint2.setSpace(board.getSpace(2, 5));
-            checkpoint3.setSpace(board.getSpace(7, 7));
-            checkpoint4.setSpace(board.getSpace(4, 1));
-            checkpoint5.setSpace(board.getSpace(0, 6));
-            checkpoint6.setSpace(board.getSpace(2, 7));
-            Space space1c = board.getSpace(0, 1);
-            Space space2c = board.getSpace(2, 5);
-            Space space3c = board.getSpace(7, 7);
-            Space space4c = board.getSpace(4, 1);
-            Space space5c = board.getSpace(0, 6);
-            Space space6c = board.getSpace(2, 7);
-            space1c.setCheckpoint(checkpoint1);
-            space2c.setCheckpoint(checkpoint2);
-            space3c.setCheckpoint(checkpoint3);
-            space4c.setCheckpoint(checkpoint4);
-            space5c.setCheckpoint(checkpoint5);
-            space6c.setCheckpoint(checkpoint6);
+
 
 
             // XXX: V2
@@ -232,26 +199,32 @@ AppController implements Observer {
     }
 
     public void saveGame() {
-        // XXX needs to be implemented eventually
+        IRepository repo = RepositoryAccess.getRepository();
+        repo.createGameInDB(gameController.board);
     }
+
 
     public void loadGame() {
-        // XXX needs to be implememted eventually
-        // for now, we just create a new game
         if (gameController == null) {
-            newGame();
+            IRepository repo = RepositoryAccess.getRepository();
+            List<GameInDB> gameList = repo.getGames();
+            ChoiceDialog<GameInDB> dialog = new ChoiceDialog<>(gameList.get(gameList.size() - 1), gameList);
+            dialog.setTitle("Games options");
+            dialog.setHeaderText("Select the game to load it");
+            Optional<GameInDB> result1 = dialog.showAndWait();
+
+            if (result1.isPresent()) {
+                Board board = repo.loadGameFromDB(result1.get().id);
+                gameController = new GameController(board);
+                roboRally.createBoardView(gameController);
+            }
         }
+
     }
 
-    /**
-     * Stop playing the current game, giving the user the option to save
-     * the game or to cancel stopping the game. The method returns true
-     * if the game was successfully stopped (with or without saving the
-     * game); returns false, if the current game was not stopped. In case
-     * there is no current game, false is returned.
-     *
-     * @return true if the current game was stopped, false otherwise
-     */
+
+    //stopGame: Denne metode gemmer det aktuelle spil og sætter gameController til null, hvilket i praksis stopper spillet.
+// Den opretter derefter brætvisningen med null, hvilket sikkert fjerner brætvisningen.
     public boolean stopGame() {
         if (gameController != null) {
 
@@ -264,7 +237,9 @@ AppController implements Observer {
         }
         return false;
     }
-
+    //exit: Denne metode håndterer afslutningen af applikationen.
+// Den viser en dialogboks, der spørger brugeren, om de er sikre på, at de vil afslutte RoboRally.
+// Hvis brugeren bekræfter, at de vil afslutte, eller hvis der ikke er noget igangværende spil, afslutter den applikationen.
     public void exit() {
         if (gameController != null) {
             Alert alert = new Alert(AlertType.CONFIRMATION);
@@ -283,15 +258,19 @@ AppController implements Observer {
             Platform.exit();
         }
     }
-
+    //isGameRunning: Denne metode returnerer en boolean, der angiver, om der i øjeblikket er et spil i gang.
+// Hvis gameController ikke er null, betyder det, at der er et spil i gang.
     public boolean isGameRunning() {
         return gameController != null;
     }
 
-
+    ///update: Da denne klasse implementerer Observer interfacet, er der en update metode, som skal implementeres.
+// Denne metode kaldes, når objektet, som denne klasse observerer
+// (dvs. et objekt af en klasse, der implementerer Subject interfacet), opdateres.
+// I dette tilfælde ser det ud til, at denne metode endnu ikke er implementeret.
     @Override
     public void update(Subject subject) {
-        // XXX do nothing for now
+
     }
 
 }

@@ -8,6 +8,8 @@ module roborally {
     requires org.jetbrains.annotations;
     requires com.google.gson;
     requires com.google.common;
+    requires java.sql;
+    requires mysql.connector.j;
 
     exports dk.dtu.compute.se.pisd.roborally;
 
