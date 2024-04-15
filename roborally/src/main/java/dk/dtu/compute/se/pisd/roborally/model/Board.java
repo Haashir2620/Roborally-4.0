@@ -22,6 +22,7 @@
 package dk.dtu.compute.se.pisd.roborally.model;
 
 import dk.dtu.compute.se.pisd.designpatterns.observer.Subject;
+import dk.dtu.compute.se.pisd.roborally.controller.Checkpoint;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -238,18 +239,26 @@ public class Board extends Subject {
      * Vi bruger getMoveCounter() til at vise hvor mange slag der er sket i spillet
      */
     public String getStatusMessage() {
-        // this is actually a view aspect, but for making assignment V1 easy for
-        // the students, this method gives a string representation of the current
-        // status of the game
+        // Få antallet af checkpoints for den nuværende spiller
+        int checkpoints = getCurrentPlayer().getCheckpointValue();
 
-        // XXX: V1 add the move count to the status message
-        // XXX: V2 changed the status so that it shows the phase, the current player and the number of steps
-        return "Phase: " + getPhase().name() +
-                ", Player = " + getCurrentPlayer().getName() +
-                ", AntalSlag = " + getMoveCounter() + ", Checkpoints = " + getCurrentPlayer().getCheckpointValue();
-
-
+        // Tjek om spilleren har 5 checkpoints
+        if (checkpoints >= 5) {
+            // Spillet er vundet, returner en vinderbesked
+            return "Phase: " + getPhase().name() +
+                    ", Player = " + getCurrentPlayer().getName() +
+                    ", AntalSlag = " + getMoveCounter() +
+                    ", Checkpoints = " + checkpoints +
+                    ". You have won the game!";
+        } else {
+            // Spillet er ikke vundet endnu, returner standardstatusbeskeden
+            return "Phase: " + getPhase().name() +
+                    ", Player = " + getCurrentPlayer().getName() +
+                    ", AntalSlag = " + getMoveCounter() +
+                    ", Checkpoints = " + checkpoints;
+        }
     }
+
 
     public void addwall(@NotNull Wall wall) {
         if (Wall.Space == this && !walls.contains(wall)) {

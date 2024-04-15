@@ -1,9 +1,12 @@
-package dk.dtu.compute.se.pisd.roborally.model;
+package dk.dtu.compute.se.pisd.roborally.controller;
+
+import dk.dtu.compute.se.pisd.roborally.model.Board;
+import dk.dtu.compute.se.pisd.roborally.model.Space;
 
 public class Checkpoint {
 
     public static Board Space;
-    private Space space;
+    private dk.dtu.compute.se.pisd.roborally.model.Space space;
 
     private boolean complete;
 

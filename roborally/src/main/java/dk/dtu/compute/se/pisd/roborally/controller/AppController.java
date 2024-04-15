@@ -44,8 +44,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
-import static dk.dtu.compute.se.pisd.roborally.model.Heading.*;
-
 /**
  * ...
  *
@@ -192,37 +190,37 @@ AppController implements Observer {
             Checkpoint checkpoint3 = new Checkpoint();
             Checkpoint checkpoint4 = new Checkpoint();
             Checkpoint checkpoint5 = new Checkpoint();
-            Checkpoint checkpoint6 = new Checkpoint();
+
             checkpoint1.setCheckpointnumber(1);
             checkpoint2.setCheckpointnumber(2);
             checkpoint3.setCheckpointnumber(3);
             checkpoint4.setCheckpointnumber(4);
             checkpoint5.setCheckpointnumber(5);
-            checkpoint6.setCheckpointnumber(6);
+
             board.addCheckpoint(checkpoint1);
             board.addCheckpoint(checkpoint2);
             board.addCheckpoint(checkpoint3);
             board.addCheckpoint(checkpoint4);
             board.addCheckpoint(checkpoint5);
-            board.addCheckpoint(checkpoint6);
+
             checkpoint1.setSpace(board.getSpace(0, 1));
             checkpoint2.setSpace(board.getSpace(2, 5));
             checkpoint3.setSpace(board.getSpace(7, 7));
             checkpoint4.setSpace(board.getSpace(4, 1));
             checkpoint5.setSpace(board.getSpace(0, 6));
-            checkpoint6.setSpace(board.getSpace(2, 7));
+
             Space space1c = board.getSpace(0, 1);
             Space space2c = board.getSpace(2, 5);
             Space space3c = board.getSpace(7, 7);
             Space space4c = board.getSpace(4, 1);
             Space space5c = board.getSpace(0, 6);
-            Space space6c = board.getSpace(2, 7);
+
             space1c.setCheckpoint(checkpoint1);
             space2c.setCheckpoint(checkpoint2);
             space3c.setCheckpoint(checkpoint3);
             space4c.setCheckpoint(checkpoint4);
             space5c.setCheckpoint(checkpoint5);
-            space6c.setCheckpoint(checkpoint6);
+
 
 
             // XXX: V2
@@ -308,4 +306,8 @@ AppController implements Observer {
 
     }
 
-}
+   }
+
+
+
+
