@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 /**
- * @author Ali Masoud
+ * @author Ekkart Kindler
  */
 
 //Repository klassen implementerer IRepository interfacet og er ansvarlig for kommunikation med databasen.
@@ -64,17 +64,21 @@ public class Repository implements IRepository {
     //    // Metoden indsætter spillets navn, nuværende spiller, fase og trin i den tilsvarende tabel.
     //    // Hvis oprettelsen lykkes, returneres true, ellers false.
     public boolean createGameInDB(Board game) {
+        //tjekker hvis pillet har en id
         if (game.getGameId() == null) {
+            //her opretter vi forbindelse til databasen ved at tildele med en connecter
             Connection connection = connector.getConnection();
+            //vi laver try catch for at håndtere fejl og auto commit er dat til false, fordi vi vil have kontrol over det
             try {
                 connection.setAutoCommit(false);
-
+                // oprettelse af preparedstament, som referer til metoden getInsertGameStatementRGK()
                 PreparedStatement ps = getInsertGameStatementRGK();
                 ps.setString(1, "Date: " +  new Date()); // instead of name
                 ps.setNull(2, Types.TINYINT); // game.getPlayerNumber(game.getCurrentPlayer())); is inserted after players!
                 ps.setInt(3, game.getPhase().ordinal());
                 ps.setInt(4, game.getStep());
                 int affectedRows = ps.executeUpdate();
+                //koden ovenfor sikrer spillets detaljer bliver korrekt indsat i databasen
                 ResultSet generatedKeys = ps.getGeneratedKeys();
                 if (affectedRows == 1 && generatedKeys.next()) {
                     game.setGameId(generatedKeys.getInt(1));
@@ -112,7 +116,7 @@ public class Repository implements IRepository {
         }
         return false;
     }
-
+    //-----------------------------------------------------------------------------------------------------------------------
     @Override
 
     //updateGameInDB: Denne metode tager et Board objekt som argument og opdaterer et eksisterende spil i databasen.
@@ -160,8 +164,9 @@ public class Repository implements IRepository {
 
         return false;
     }
+    //__________________________________________________________________________________________________________________
     /**
-     * @author Ali Masoud
+     * @author Unknown
      */
     @Override
     //loadGameFromDB: Denne metode tager et spil-id som argument og indlæser det tilsvarende spil fra databasen.
@@ -210,6 +215,8 @@ public class Repository implements IRepository {
         return null;
     }
 
+    //__________________________________________________________________________________________________________________
+
     @Override
     //getGames: Denne metode returnerer en liste af GameInDB objekter, som repræsenterer alle spil i databasen.
     // Hvert GameInDB objekt indeholder spillets id og navn
@@ -229,6 +236,7 @@ public class Repository implements IRepository {
         }
         return result;
     }
+    //__________________________________________________________________________________________________________________
 
     private void createPlayersInDB(Board game) throws SQLException {
         PreparedStatement ps = getSelectPlayersStatementU();
@@ -317,11 +325,16 @@ For at gemme commands for de forskellige programmeringskort, tjekkes først om d
 derefter findes den præcise command og der sættes .ordinal() i slutningen for at lave det om til en string.
 Det samme gøres for håndkortene men typen får værdien 1 fra FIELD_TYPE_HAND og der bruges getCardField(j) i stedet for getProgramField(j).
      */
+    //Metoden her opretter en skema for alle kort og håndkort, som gemmes i databasen.
     private void createCardFieldsInDB(Board game) throws SQLException {
+        //vi opretter preparedstatement som referer til metoden getSelectCardFieldStatementU
         PreparedStatement ps = getSelectCardFieldStatementU();
+        //Vi tager udgangspunkt i gameid
         ps.setInt(1, game.getGameId());
-
+        //Vi eksekverer query, som er en metoder der henter data fra databsen
         ResultSet rs = ps.executeQuery();
+
+        //overordnet så koden ovenover sørger for at gemme data i databasen
 
         for (int i = 0; i < game.getPlayersNumber(); i++) {
             player = game.getPlayer(i);
@@ -391,6 +404,7 @@ Hvis field ikke er tom så sættes Visibile til at være true og dermed visible.
         }
         rs.close();
     }
+    //_________________________________________________________________________________________________________________
     /*
     I denne metode er det lidt på samme måde som createCardFieldInDB, hvor der findes mange af de samme måder tingene er brugt på.
     Og dermed er der ikke så meget at forklare yderligere.
@@ -424,6 +438,8 @@ Hvis field ikke er tom så sættes Visibile til at være true og dermed visible.
         }
         rs.close();
     }
+
+    //-----------------------------------------------------------------------------------------------------------------
 
 
     private static final String SQL_INSERT_GAME =

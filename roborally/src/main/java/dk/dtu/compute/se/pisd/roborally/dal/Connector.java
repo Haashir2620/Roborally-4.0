@@ -26,7 +26,7 @@ public class Connector {
 
     //USERNAME og PASSWORD er legitimationsoplysninger, der bruges til at oprette forbindelse til databasen.
     private static final String USERNAME = "root";
-    private static final String PASSWORD = "Ali292003";
+    private static final String PASSWORD = "";
 
     //DELIMITER er tegnet, der bruges til at adskille individuelle SQL-kommandoer i en streng med flere kommandoer.
     private static final String DELIMITER = ";";
