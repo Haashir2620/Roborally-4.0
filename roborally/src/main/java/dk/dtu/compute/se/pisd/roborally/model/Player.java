@@ -47,6 +47,8 @@ public class Player extends Subject {
 
     private boolean checkpoint1Complete;
 
+    private int hp;
+
     private int checkpointValue;
 
     public int getCheckpointValue() {
@@ -164,5 +166,12 @@ public class Player extends Subject {
         return cards[i];
     }
 
+    public int getHp() {
+        return hp;
+    }
+
+    public void setHp(int hp) {
+        this.hp = hp;
+    }
 
 }
