@@ -91,7 +91,7 @@ AppController implements Observer {
                 }
             }
 
-            Board board = LoadBoard.loadBoard(boardResult);
+            Board board = LoadBoard.loadBoard(Integer.parseInt(boardResult));
             System.out.println(boardResult);
 
 
