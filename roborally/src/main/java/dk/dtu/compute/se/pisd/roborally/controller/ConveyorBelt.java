@@ -28,7 +28,7 @@ public class ConveyorBelt extends FieldAction {
             return false; // Hvis der ikke er nogen spiller, afslut tidligt
         }
 
-        Heading heading = player.getHeading(); // Antager at du henter retningen fra spilleren
+        Heading heading = player.getHeading(); //  henter retningen fra spilleren
         Space space2 = gameController.board.getNeighbour(space, heading);
 
         if (space2 != null && space2.getPlayer() == null) { // Tjek om nabopladsen er tom

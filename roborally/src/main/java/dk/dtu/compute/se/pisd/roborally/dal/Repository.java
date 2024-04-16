@@ -61,7 +61,7 @@ public class Repository implements IRepository {
 
     @Override
     // //createGameInDB: Denne metode tager et Board objekt som argument og opretter et nyt spil i databasen.
-    //    // Metoden indsætter spillets navn, nuværende spiller, fase og trin i den tilsvarende tabel.
+    //    // Metoden indsætter spillets navn, nuværende spiller, fase, trin, og board i den tilsvarende tabel.
     //    // Hvis oprettelsen lykkes, returneres true, ellers false.
     public boolean createGameInDB(Board game) {
         //tjekker hvis pillet har en id
@@ -169,7 +169,7 @@ public class Repository implements IRepository {
     }
     //__________________________________________________________________________________________________________________
     /**
-     * @author Unknown
+     * @
      */
     @Override
     //loadGameFromDB: Denne metode tager et spil-id som argument og indlæser det tilsvarende spil fra databasen.
@@ -311,25 +311,6 @@ public class Repository implements IRepository {
 
     }
     /*
-Metoden createCardFieldsInDB sørger for at oprette et skema for både spillerenes programmeringskort og håndkort som gemmes i databasen når knappen savGame bliver valgt og dermed metoden createGameInDB bliver kaldt
-Til at starte med oprettes et preparedstatement som refererer til metoden getSelectCardFieldStatementU().
-Og dernæst tages udgangspunkt i game id'et
-Ideen bag CardFields skema er at referere til et gamID for den valgte game, et playerID for den bestemte spiller så hver spiller har sin egen gemte kort,
-en type som enten kan være programmeringskort eller håndkort, en position for det kort, en command for de enkelte kort og om de vises på boardet eller ikke.
-Der oprettes derfor to for loops, den første beskriver til at starte med de 5 programmeringskort og det er derfor i-værdien kun går op til 5,
-den anden beskriver de 8 håndkort og derfor går i-værdien op til 8.
-De to for loops ligger i en stor for loop som tager udgangspunkt i hver enkelt spiller og dermed gennemgås koden for hver spiller.
-rs bruges for at gemme de forskellige data i databasen. rs bliver erklæret som et resultset hvor man eksekverer query.
-Der er blevet lavet forskellige strings og integers i denne sammenhæng som står øverst i klassen.
-Den første string er GameID, som selvfølgelige bliver tildelt gamet's id og dermed hentes det ved at kalde metoden game.getGameID og metoden updateInt bruges da vi har at gøre med en integer som er ID.
-Den anden er playerID og i vores tilfælde er playerID bar værdien i fra for loopet som gennemgår hver enkelt spiller.
-Positionen på den enkelte kort bliver defineret som j da det er den værdi som bruges i for loopet til at gennemgå alle kortene.
-Ift. typen på kortene har vi lavet to integers med navnet FIELD_TYPE_REGISTER som har værdien 0 og FIELD_TYPE_HAND som har værdien 1.
-I den første for loop har vi at gøre med programmeringskort og derfor bliver typen tildelt værdien for FIELD_TYPE_REGISTER som er 0.
-For at tildele en værdi for Visible bliver vi nød til at bruge updateBoolean i stedet da vi har at gøre med et boolean, og derefter bruger vi metoden player.getProgramField(j).isVisible() til både at vide hvilket kort det er og om det er synligt eller ikke.
-For at gemme commands for de forskellige programmeringskort, tjekkes først om der er kort, for hvis der ikke er giver det ikke mening at gemme commands og der vil derfor kommer fejl.
-derefter findes den præcise command og der sættes .ordinal() i slutningen for at lave det om til en string.
-Det samme gøres for håndkortene men typen får værdien 1 fra FIELD_TYPE_HAND og der bruges getCardField(j) i stedet for getProgramField(j).
      */
     //Metoden her opretter en skema for alle kort og håndkort, som gemmes i databasen.
     private void createCardFieldsInDB(Board game) throws SQLException {
@@ -337,7 +318,7 @@ Det samme gøres for håndkortene men typen får værdien 1 fra FIELD_TYPE_HAND 
         PreparedStatement ps = getSelectCardFieldStatementU();
         //Vi tager udgangspunkt i gameid
         ps.setInt(1, game.getGameId());
-        //Vi eksekverer query, som er en metoder der henter data fra databsen
+        //Vi eksekverer query, som er en metode der henter data fra databsen
         ResultSet rs = ps.executeQuery();
 
         //overordnet så koden ovenover sørger for at gemme data i databasen
