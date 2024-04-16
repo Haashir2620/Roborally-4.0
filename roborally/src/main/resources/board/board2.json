@@ -295,19 +295,6 @@
     }
   ,
     {
-      "walls": [],
-      "actions": [
-        {
-          "CLASSNAME": "dk.dtu.compute.se.pisd.roborally.controller.Turnpad",
-          "INSTANCE": {
-            "direction": 2
-          }
-        }
-      ],
-      "x": 7,
-      "y": 4
-    },
-    {
 
     }
   ]
