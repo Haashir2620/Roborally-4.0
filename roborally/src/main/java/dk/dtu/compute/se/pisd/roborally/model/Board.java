@@ -51,9 +51,6 @@ public class Board extends Subject {
 
     private final List<Wall> walls = new ArrayList<>();
 
-    private final List<Checkpoint> checkpoints = new ArrayList<>();
-
-    private final List<Conveyerbelt> conveyerbelts = new ArrayList<>();
 
     private Player current;
 
@@ -65,9 +62,7 @@ public class Board extends Subject {
 
     private int moveCounter = 0;
 
-    private Checkpoint checkpoint;
 
-    private boolean checkpointBool;
 
     /**
      * Vi opretter en privat variabel som er vores counter
@@ -259,18 +254,6 @@ public class Board extends Subject {
 
     }
 
-    public void addConveyerbelt(@NotNull Conveyerbelt conveyerbelt) {
-        if (Conveyerbelt.Space == this && !conveyerbelts.contains(conveyerbelt)) {
-            conveyerbelts.add(conveyerbelt);
-            notifyChange();
-        }
-    }
-
-    public void addCheckpoint(Checkpoint checkpoint) {
-        if (checkpoint.Space == this && !checkpoints.contains(checkpoint))
-            checkpoints.add(checkpoint);
-        notifyChange();
-    }
 
     public Space getRandomSpace() {
         int x = (int) (Math.random()* width);
@@ -279,5 +262,9 @@ public class Board extends Subject {
 
 
 
+    }
+
+    public String getBoardName() {
+        return boardName;
     }
 }

@@ -47,7 +47,7 @@ public class Repository implements IRepository {
     private static final String FIELD_POSITION = "position";
     private static final String FIELD_VISIBLE = "visible";
     private static final String FIELD_COMMAND = "command";
-
+    private static final String PLAYER_HP = "hp";
 
 
     private Connector connector;
@@ -77,6 +77,8 @@ public class Repository implements IRepository {
                 ps.setNull(2, Types.TINYINT); // game.getPlayerNumber(game.getCurrentPlayer())); is inserted after players!
                 ps.setInt(3, game.getPhase().ordinal());
                 ps.setInt(4, game.getStep());
+                ps.setString(5, game.getBoardName()); // Tilføjelse af boardName til SQL statement
+
                 //tilføj at boardname også gemmes
                 int affectedRows = ps.executeUpdate();
                 //koden ovenfor sikrer spillets detaljer bliver korrekt indsat i databasen
@@ -183,7 +185,8 @@ public class Repository implements IRepository {
             ResultSet rs = ps.executeQuery();
             int playerNo = -1;
             if (rs.next()) {
-                game = LoadBoard.loadBoard(null);
+                game = LoadBoard.loadBoard(rs.getInt("boardname"));
+
                 if (game == null) {
                     return null;
                 }
@@ -254,6 +257,8 @@ public class Repository implements IRepository {
             rs.updateInt(PLAYER_POSITION_X, player.getSpace().x);
             rs.updateInt(PLAYER_POSITION_Y, player.getSpace().y);
             rs.updateInt(PLAYER_HEADING, player.getHeading().ordinal());
+            rs.updateInt(PLAYER_HP, player.getHp());
+
             rs.insertRow();
         }
 
@@ -444,7 +449,7 @@ Hvis field ikke er tom så sættes Visibile til at være true og dermed visible.
 
 
     private static final String SQL_INSERT_GAME =
-            "INSERT INTO Game(name, currentPlayer, phase, step) VALUES (?, ?, ?, ?)";
+            "INSERT INTO Game(name, currentPlayer, phase, step, boardName) VALUES (?, ?, ?, ?, ?)";
 
     private PreparedStatement insert_game_stmt = null;
 
