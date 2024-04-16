@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 /**
- * @author Ali Masoud
+ * @author Ekkart Kindler
  */
 
 //Repository klassen implementerer IRepository interfacet og er ansvarlig for kommunikation med databasen.
@@ -47,7 +47,7 @@ public class Repository implements IRepository {
     private static final String FIELD_POSITION = "position";
     private static final String FIELD_VISIBLE = "visible";
     private static final String FIELD_COMMAND = "command";
-
+    private static final String PLAYER_HP = "hp";
 
 
     private Connector connector;
@@ -61,20 +61,27 @@ public class Repository implements IRepository {
 
     @Override
     // //createGameInDB: Denne metode tager et Board objekt som argument og opretter et nyt spil i databasen.
-    //    // Metoden indsætter spillets navn, nuværende spiller, fase og trin i den tilsvarende tabel.
+    //    // Metoden indsætter spillets navn, nuværende spiller, fase, trin, og board i den tilsvarende tabel.
     //    // Hvis oprettelsen lykkes, returneres true, ellers false.
     public boolean createGameInDB(Board game) {
+        //tjekker hvis pillet har en id
         if (game.getGameId() == null) {
+            //her opretter vi forbindelse til databasen ved at tildele med en connecter
             Connection connection = connector.getConnection();
+            //vi laver try catch for at håndtere fejl og auto commit er dat til false, fordi vi vil have kontrol over det
             try {
                 connection.setAutoCommit(false);
-
+                // oprettelse af preparedstament, som referer til metoden getInsertGameStatementRGK()
                 PreparedStatement ps = getInsertGameStatementRGK();
                 ps.setString(1, "Date: " +  new Date()); // instead of name
                 ps.setNull(2, Types.TINYINT); // game.getPlayerNumber(game.getCurrentPlayer())); is inserted after players!
                 ps.setInt(3, game.getPhase().ordinal());
                 ps.setInt(4, game.getStep());
+                ps.setString(5, game.getBoardName()); // Tilføjelse af boardName til SQL statement
+
+                //tilføj at boardname også gemmes
                 int affectedRows = ps.executeUpdate();
+                //koden ovenfor sikrer spillets detaljer bliver korrekt indsat i databasen
                 ResultSet generatedKeys = ps.getGeneratedKeys();
                 if (affectedRows == 1 && generatedKeys.next()) {
                     game.setGameId(generatedKeys.getInt(1));
@@ -112,7 +119,7 @@ public class Repository implements IRepository {
         }
         return false;
     }
-
+    //-----------------------------------------------------------------------------------------------------------------------
     @Override
 
     //updateGameInDB: Denne metode tager et Board objekt som argument og opdaterer et eksisterende spil i databasen.
@@ -160,8 +167,9 @@ public class Repository implements IRepository {
 
         return false;
     }
+    //__________________________________________________________________________________________________________________
     /**
-     * @author Ali Masoud
+     * @
      */
     @Override
     //loadGameFromDB: Denne metode tager et spil-id som argument og indlæser det tilsvarende spil fra databasen.
@@ -177,7 +185,8 @@ public class Repository implements IRepository {
             ResultSet rs = ps.executeQuery();
             int playerNo = -1;
             if (rs.next()) {
-                game = LoadBoard.loadBoard(null);
+                game = LoadBoard.loadBoard(rs.getInt("boardname"));
+
                 if (game == null) {
                     return null;
                 }
@@ -210,6 +219,8 @@ public class Repository implements IRepository {
         return null;
     }
 
+    //__________________________________________________________________________________________________________________
+
     @Override
     //getGames: Denne metode returnerer en liste af GameInDB objekter, som repræsenterer alle spil i databasen.
     // Hvert GameInDB objekt indeholder spillets id og navn
@@ -229,6 +240,7 @@ public class Repository implements IRepository {
         }
         return result;
     }
+    //__________________________________________________________________________________________________________________
 
     private void createPlayersInDB(Board game) throws SQLException {
         PreparedStatement ps = getSelectPlayersStatementU();
@@ -245,6 +257,8 @@ public class Repository implements IRepository {
             rs.updateInt(PLAYER_POSITION_X, player.getSpace().x);
             rs.updateInt(PLAYER_POSITION_Y, player.getSpace().y);
             rs.updateInt(PLAYER_HEADING, player.getHeading().ordinal());
+            rs.updateInt(PLAYER_HP, player.getHp());
+
             rs.insertRow();
         }
 
@@ -297,31 +311,17 @@ public class Repository implements IRepository {
 
     }
     /*
-Metoden createCardFieldsInDB sørger for at oprette et skema for både spillerenes programmeringskort og håndkort som gemmes i databasen når knappen savGame bliver valgt og dermed metoden createGameInDB bliver kaldt
-Til at starte med oprettes et preparedstatement som refererer til metoden getSelectCardFieldStatementU().
-Og dernæst tages udgangspunkt i game id'et
-Ideen bag CardFields skema er at referere til et gamID for den valgte game, et playerID for den bestemte spiller så hver spiller har sin egen gemte kort,
-en type som enten kan være programmeringskort eller håndkort, en position for det kort, en command for de enkelte kort og om de vises på boardet eller ikke.
-Der oprettes derfor to for loops, den første beskriver til at starte med de 5 programmeringskort og det er derfor i-værdien kun går op til 5,
-den anden beskriver de 8 håndkort og derfor går i-værdien op til 8.
-De to for loops ligger i en stor for loop som tager udgangspunkt i hver enkelt spiller og dermed gennemgås koden for hver spiller.
-rs bruges for at gemme de forskellige data i databasen. rs bliver erklæret som et resultset hvor man eksekverer query.
-Der er blevet lavet forskellige strings og integers i denne sammenhæng som står øverst i klassen.
-Den første string er GameID, som selvfølgelige bliver tildelt gamet's id og dermed hentes det ved at kalde metoden game.getGameID og metoden updateInt bruges da vi har at gøre med en integer som er ID.
-Den anden er playerID og i vores tilfælde er playerID bar værdien i fra for loopet som gennemgår hver enkelt spiller.
-Positionen på den enkelte kort bliver defineret som j da det er den værdi som bruges i for loopet til at gennemgå alle kortene.
-Ift. typen på kortene har vi lavet to integers med navnet FIELD_TYPE_REGISTER som har værdien 0 og FIELD_TYPE_HAND som har værdien 1.
-I den første for loop har vi at gøre med programmeringskort og derfor bliver typen tildelt værdien for FIELD_TYPE_REGISTER som er 0.
-For at tildele en værdi for Visible bliver vi nød til at bruge updateBoolean i stedet da vi har at gøre med et boolean, og derefter bruger vi metoden player.getProgramField(j).isVisible() til både at vide hvilket kort det er og om det er synligt eller ikke.
-For at gemme commands for de forskellige programmeringskort, tjekkes først om der er kort, for hvis der ikke er giver det ikke mening at gemme commands og der vil derfor kommer fejl.
-derefter findes den præcise command og der sættes .ordinal() i slutningen for at lave det om til en string.
-Det samme gøres for håndkortene men typen får værdien 1 fra FIELD_TYPE_HAND og der bruges getCardField(j) i stedet for getProgramField(j).
      */
+    //Metoden her opretter en skema for alle kort og håndkort, som gemmes i databasen.
     private void createCardFieldsInDB(Board game) throws SQLException {
+        //vi opretter preparedstatement som referer til metoden getSelectCardFieldStatementU
         PreparedStatement ps = getSelectCardFieldStatementU();
+        //Vi tager udgangspunkt i gameid
         ps.setInt(1, game.getGameId());
-
+        //Vi eksekverer query, som er en metode der henter data fra databsen
         ResultSet rs = ps.executeQuery();
+
+        //overordnet så koden ovenover sørger for at gemme data i databasen
 
         for (int i = 0; i < game.getPlayersNumber(); i++) {
             player = game.getPlayer(i);
@@ -391,6 +391,7 @@ Hvis field ikke er tom så sættes Visibile til at være true og dermed visible.
         }
         rs.close();
     }
+    //_________________________________________________________________________________________________________________
     /*
     I denne metode er det lidt på samme måde som createCardFieldInDB, hvor der findes mange af de samme måder tingene er brugt på.
     Og dermed er der ikke så meget at forklare yderligere.
@@ -425,9 +426,11 @@ Hvis field ikke er tom så sættes Visibile til at være true og dermed visible.
         rs.close();
     }
 
+    //-----------------------------------------------------------------------------------------------------------------
+
 
     private static final String SQL_INSERT_GAME =
-            "INSERT INTO Game(name, currentPlayer, phase, step) VALUES (?, ?, ?, ?)";
+            "INSERT INTO Game(name, currentPlayer, phase, step, boardName) VALUES (?, ?, ?, ?, ?)";
 
     private PreparedStatement insert_game_stmt = null;
 

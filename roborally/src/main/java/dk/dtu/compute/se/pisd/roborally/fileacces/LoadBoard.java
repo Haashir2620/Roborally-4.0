@@ -21,20 +21,17 @@ import java.io.*;
 //den skal blive kaldt i appcontroller og dal osv
 public class LoadBoard {
 
-    private static final String BOARDSFOLDER = "boards";
-    private static final String DEFAULTBOARD = "defaultboard" +"defaultboard2";
+    private static final String BOARDSFOLDER = "Boards";
+    private static final String DEFAULTBOARD = "defaultboard";
     private static final String JSON_EXT = "json";
 
-    public static Board loadBoard(String boardname) {
-        if (boardname == null) {
-            boardname = DEFAULTBOARD;
-        }
+    public static Board loadBoard(int boardname) {
+
 
         ClassLoader classLoader = LoadBoard.class.getClassLoader();
         InputStream inputStream = classLoader.getResourceAsStream(BOARDSFOLDER + "/" + boardname + "." + JSON_EXT);
         if (inputStream == null) {
-            // TODO these constants should be defined somewhere
-            return new Board(8,8);
+            return new Board(8, 8);
         }
 
         // In simple cases, we can create a Gson object with new Gson():
@@ -43,15 +40,15 @@ public class LoadBoard {
         Gson gson = simpleBuilder.create();
 
         Board result;
-        // FileReader fileReader = null;
+        InputStreamReader streamReader;
         JsonReader reader = null;
         try {
-            // fileReader = new FileReader(filename);
-            reader = gson.newJsonReader(new InputStreamReader(inputStream));
+            streamReader = new InputStreamReader(inputStream);
+            reader = gson.newJsonReader(streamReader);
             BoardTemplate template = gson.fromJson(reader, BoardTemplate.class);
 
             result = new Board(template.width, template.height);
-            for (SpaceTemplate spaceTemplate: template.spaces) {
+            for (SpaceTemplate spaceTemplate : template.spaces) {
                 Space space = result.getSpace(spaceTemplate.x, spaceTemplate.y);
                 if (space != null) {
                     space.getActions().addAll(spaceTemplate.actions);
@@ -65,12 +62,14 @@ public class LoadBoard {
                 try {
                     reader.close();
                     inputStream = null;
-                } catch (IOException e2) {}
+                } catch (IOException e2) {
+                }
             }
             if (inputStream != null) {
                 try {
                     inputStream.close();
-                } catch (IOException e2) {}
+                } catch (IOException e2) {
+                }
             }
         }
         return null;
@@ -81,24 +80,21 @@ public class LoadBoard {
         template.width = board.width;
         template.height = board.height;
 
-        for (int i=0; i<board.width; i++) {
-            for (int j=0; j<board.height; j++) {
-                Space space = board.getSpace(i,j);
-                if (!space.getWalls().isEmpty() || !space.getActions().isEmpty()) {
+        for (int i = 0; i < board.width; i++) {
+            for (int j = 0; j < board.height; j++) {
+                Space space = board.getSpace(i, j);
+                /*if (!space.getWalls().isEmpty() || !space.getActions().isEmpty()) {
                     SpaceTemplate spaceTemplate = new SpaceTemplate();
                     spaceTemplate.x = space.x;
                     spaceTemplate.y = space.y;
                     spaceTemplate.actions.addAll(space.getActions());
                     spaceTemplate.walls.addAll(space.getWalls());
                     template.spaces.add(spaceTemplate);
-                }
+                }*/
             }
         }
 
         ClassLoader classLoader = LoadBoard.class.getClassLoader();
-        // TODO: this is not very defensive, and will result in a NullPointerException
-        //       when the folder "resources" does not exist! But, it does not need
-        //       the file "simpleCards.json" to exist!
         String filename =
                 classLoader.getResource(BOARDSFOLDER).getPath() + "/" + name + "." + JSON_EXT;
 
@@ -126,12 +122,14 @@ public class LoadBoard {
                 try {
                     writer.close();
                     fileWriter = null;
-                } catch (IOException e2) {}
+                } catch (IOException e2) {
+                }
             }
             if (fileWriter != null) {
                 try {
                     fileWriter.close();
-                } catch (IOException e2) {}
+                } catch (IOException e2) {
+                }
             }
         }
     }
