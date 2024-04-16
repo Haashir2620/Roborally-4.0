@@ -44,6 +44,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
+import static dk.dtu.compute.se.pisd.roborally.model.Heading.*;
+
 /**
  * ...
  *
@@ -56,7 +58,7 @@ AppController implements Observer {
     final private List<Integer> PLAYER_NUMBER_OPTIONS = Arrays.asList(2, 3, 4, 5, 6);
     final private List<String> PLAYER_COLORS = Arrays.asList("red", "green", "blue", "orange", "grey", "magenta");
     //Ny kode relevant ift JSON
-    final private List<String> BOARD_OPTIONS = Arrays.asList("Board 1", "Board 2");
+    final private List<Integer> BOARD_OPTIONS = Arrays.asList(1, 2);
 
 
     final private RoboRally roboRally;
@@ -73,163 +75,98 @@ AppController implements Observer {
         dialog.setHeaderText("Select number of players");
         Optional<Integer> result = dialog.showAndWait();
 
-        ChoiceDialog<String> dialog2 = new ChoiceDialog<>(BOARD_OPTIONS.get(0), BOARD_OPTIONS);
-        dialog2.setTitle("Choice of board");
-        dialog2.setHeaderText("Select board");
-        Optional<String> result2 = dialog2.showAndWait();
 
-        String boardResult = String.valueOf(result2);
+        /**
+         * This allows players to choose from board options that are defined in an array list
+         * as a parameter in the AppController.
+         * It then takes the answer and defines it as result1,
+         * which is then used to select the correct board from the board folder that contains the JSON files.
+         *
+         * @author
+         */
 
+        ChoiceDialog<Integer> dialog1 = new ChoiceDialog<>(BOARD_OPTIONS.get(0), BOARD_OPTIONS);
+        dialog1.setTitle("Board number");
+        dialog1.setHeaderText("Select Board");
+        Optional<Integer> result1 = dialog1.showAndWait();
 
+        Board board = null;
         if (result.isPresent()) {
             if (gameController != null) {
-
+                // The UI should not allow this, but in case this happens anyway.
+                // give the user the option to save the game or abort this operation!
                 if (!stopGame()) {
                     return;
                 }
             }
 
-            Board board = LoadBoard.loadBoard(boardResult);
-            System.out.println(boardResult);
-
+            // XXX the board should eventually be created programmatically or loaded from a file
+            //     here we just create an empty board with the required number of players.
+            //Board board = Boards.createBoard("Board1");
+            board = LoadBoard.loadBoard(result1.get());
 
             gameController = new GameController(board);
             int no = result.get();
             for (int i = 0; i < no; i++) {
                 Player player = new Player(board, PLAYER_COLORS.get(i), "Player " + (i + 1));
+                player.setHp(3);
                 board.addPlayer(player);
                 player.setSpace(board.getSpace(i % board.width, i));
 
             }
 
+        }
 
-            // Tilføjer vægge til brættet
-            Wall wall1 = new Wall(Heading.SOUTH, board);
-            Wall wall2 = new Wall(Heading.NORTH, board);
-            Wall wall3 = new Wall(Heading.EAST, board);
-            Wall wall4 = new Wall(Heading.WEST, board);
-            Wall wall5 = new Wall(Heading.SOUTH, board);
-            Wall wall6 = new Wall(Heading.NORTH, board);
-            Wall wall7 = new Wall(Heading.EAST, board);
-            Wall wall8 = new Wall(Heading.WEST, board);
-            Wall wall9 = new Wall(Heading.SOUTH, board);
-            Wall wall10 = new Wall(Heading.NORTH, board);
-            Wall wall11 = new Wall(Heading.EAST, board);
-            Wall wall12 = new Wall(Heading.WEST, board);
 
-            board.addwall(wall1);
-            board.addwall(wall2);
-            board.addwall(wall3);
-            board.addwall(wall4);
-            board.addwall(wall5);
-            board.addwall(wall6);
-            board.addwall(wall7);
-            board.addwall(wall8);
-            board.addwall(wall9);
-            board.addwall(wall10);
-            board.addwall(wall11);
-            board.addwall(wall12);
+        // Tilføjer vægge til brættet
+        Wall wall1 = new Wall(Heading.SOUTH, board);
+        Wall wall2 = new Wall(Heading.NORTH, board);
+        Wall wall3 = new Wall(Heading.EAST, board);
+        Wall wall4 = new Wall(Heading.WEST, board);
+        Wall wall5 = new Wall(Heading.SOUTH, board);
+        Wall wall6 = new Wall(Heading.NORTH, board);
+        Wall wall7 = new Wall(Heading.EAST, board);
+        Wall wall8 = new Wall(Heading.WEST, board);
+        Wall wall9 = new Wall(Heading.SOUTH, board);
+        Wall wall10 = new Wall(Heading.NORTH, board);
+        Wall wall11 = new Wall(Heading.EAST, board);
+        Wall wall12 = new Wall(Heading.WEST, board);
+
+        board.addwall(wall1);
+        board.addwall(wall2);
+        board.addwall(wall3);
+        board.addwall(wall4);
+        board.addwall(wall5);
+        board.addwall(wall6);
+        board.addwall(wall7);
+        board.addwall(wall8);
+        board.addwall(wall9);
+        board.addwall(wall10);
+        board.addwall(wall11);
+        board.addwall(wall12);
 
 // Placeringer af vægge
-            wall1.setSpace(board.getSpace(0, 0));
-            wall2.setSpace(board.getSpace(1, 1));
-            wall3.setSpace(board.getSpace(0, 2));
-            wall4.setSpace(board.getSpace(2, 1));
-            wall5.setSpace(board.getSpace(2, 3));
-            wall6.setSpace(board.getSpace(3, 3));
-            wall7.setSpace(board.getSpace(3, 4));
-            wall8.setSpace(board.getSpace(3, 5));
-            wall9.setSpace(board.getSpace(4, 4));
-            wall10.setSpace(board.getSpace(5, 4));
-            wall11.setSpace(board.getSpace(5, 2));
-            wall12.setSpace(board.getSpace(5, 3));
+        wall1.setSpace(board.getSpace(0, 0));
+        wall2.setSpace(board.getSpace(1, 1));
+        wall3.setSpace(board.getSpace(0, 2));
+        wall4.setSpace(board.getSpace(2, 1));
+        wall5.setSpace(board.getSpace(2, 3));
+        wall6.setSpace(board.getSpace(3, 3));
+        wall7.setSpace(board.getSpace(3, 4));
+        wall8.setSpace(board.getSpace(3, 5));
+        wall9.setSpace(board.getSpace(4, 4));
+        wall10.setSpace(board.getSpace(5, 4));
+        wall11.setSpace(board.getSpace(5, 2));
+        wall12.setSpace(board.getSpace(5, 3));
 
 
-            // Opretter og placerer det første conveyerbelt
-            Conveyerbelt conveyerbelt1 = new Conveyerbelt();
-            conveyerbelt1.setHeading(Heading.WEST); // Retningen for dette conveyerbelt
-            conveyerbelt1.setSpace(board.getSpace(1, 3)); // række 1, kolonne 3
-            board.addConveyerbelt(conveyerbelt1);
-            Space space1 = board.getSpace(1, 3); // Gemmer referencen til Space
-            space1.setConveyerbelt(conveyerbelt1); // Sætter conveyerbeltet på Space
+        // XXX: V2
+        //oard.setCurrentPlayer(board.getPlayer(0));
+        gameController.startProgrammingPhase();
 
-// Opretter og placerer det andet conveyerbelt
-            Conveyerbelt conveyerbelt2 = new Conveyerbelt();
-            conveyerbelt2.setHeading(Heading.NORTH);
-            conveyerbelt2.setSpace(board.getSpace(4, 6));
-            Space space2 = board.getSpace(4, 6);
-            space2.setConveyerbelt(conveyerbelt2);
-
-// Opretter og placerer det tredje conveyerbelt
-            Conveyerbelt conveyerbelt3 = new Conveyerbelt();
-            conveyerbelt3.setHeading(Heading.EAST);
-            conveyerbelt3.setSpace(board.getSpace(2, 4));
-            board.addConveyerbelt(conveyerbelt3);
-            Space space3 = board.getSpace(2, 4);
-            space3.setConveyerbelt(conveyerbelt3);
-
-// Opretter og placerer det fjerde conveyerbelt
-            Conveyerbelt conveyerbelt4 = new Conveyerbelt();
-            conveyerbelt4.setHeading(Heading.SOUTH);
-            conveyerbelt4.setSpace(board.getSpace(3, 7));
-            board.addConveyerbelt(conveyerbelt4);
-            Space space4 = board.getSpace(3, 7);
-            space4.setConveyerbelt(conveyerbelt4);
-
-// Opretter og placerer det femte conveyerbelt
-            Conveyerbelt conveyerbelt5 = new Conveyerbelt();
-            conveyerbelt5.setHeading(Heading.WEST);
-            conveyerbelt5.setSpace(board.getSpace(5, 2));
-            board.addConveyerbelt(conveyerbelt5);
-            Space space5 = board.getSpace(5, 2);
-            space5.setConveyerbelt(conveyerbelt5);
-
-
-            Checkpoint checkpoint1 = new Checkpoint();
-            Checkpoint checkpoint2 = new Checkpoint();
-            Checkpoint checkpoint3 = new Checkpoint();
-            Checkpoint checkpoint4 = new Checkpoint();
-            Checkpoint checkpoint5 = new Checkpoint();
-
-            checkpoint1.setCheckpointnumber(1);
-            checkpoint2.setCheckpointnumber(2);
-            checkpoint3.setCheckpointnumber(3);
-            checkpoint4.setCheckpointnumber(4);
-            checkpoint5.setCheckpointnumber(5);
-
-            board.addCheckpoint(checkpoint1);
-            board.addCheckpoint(checkpoint2);
-            board.addCheckpoint(checkpoint3);
-            board.addCheckpoint(checkpoint4);
-            board.addCheckpoint(checkpoint5);
-
-            checkpoint1.setSpace(board.getSpace(0, 1));
-            checkpoint2.setSpace(board.getSpace(2, 5));
-            checkpoint3.setSpace(board.getSpace(7, 7));
-            checkpoint4.setSpace(board.getSpace(4, 1));
-            checkpoint5.setSpace(board.getSpace(0, 6));
-
-            Space space1c = board.getSpace(0, 1);
-            Space space2c = board.getSpace(2, 5);
-            Space space3c = board.getSpace(7, 7);
-            Space space4c = board.getSpace(4, 1);
-            Space space5c = board.getSpace(0, 6);
-
-            space1c.setCheckpoint(checkpoint1);
-            space2c.setCheckpoint(checkpoint2);
-            space3c.setCheckpoint(checkpoint3);
-            space4c.setCheckpoint(checkpoint4);
-            space5c.setCheckpoint(checkpoint5);
-
-
-
-            // XXX: V2
-            //oard.setCurrentPlayer(board.getPlayer(0));
-            gameController.startProgrammingPhase();
-
-            roboRally.createBoardView(gameController);
-        }
+        roboRally.createBoardView(gameController);
     }
+
 
     public void saveGame() {
         IRepository repo = RepositoryAccess.getRepository();
@@ -306,8 +243,4 @@ AppController implements Observer {
 
     }
 
-   }
-
-
-
-
+}

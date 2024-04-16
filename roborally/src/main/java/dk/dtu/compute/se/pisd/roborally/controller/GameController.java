@@ -323,97 +323,20 @@ public class GameController {
      *               player away before moving onto the space
      */
     public void moveForward(@NotNull Player player) {
-        Space space = player.getSpace();
-        Heading heading = player.getHeading();
-        Wall wallcurrentspace = space.getWall();
-
-
-        if (space != null) {
-
-            Space space1 = board.getNeighbour(space, heading);
-            Wall wallspacetarget = space1.getWall();
-            Heading heading2 = player.getHeading();
-
-
-
-            player.setHeading(heading.prev());
-            Heading heading3 = player.getHeading();
-
-            player.setHeading(heading3.prev());
-            Heading heading4 = player.getHeading();
-
-
-            player.setHeading(heading);
-
-
-            if (space1.getCheckpoint() != null) {
-                int value = player.getCheckpointValue();
-                switch (value) {
-                    case 0:
-                        if (player.getCheckpointValue() == 0 && space1.getCheckpoint().getCheckpointnumber() == 1) {
-                            player.setCheckpointValue(1);
-                        }
-                        break;
-                    case 1:
-                        if (player.getCheckpointValue() == 1 && space1.getCheckpoint().getCheckpointnumber() == 2) {
-                            player.setCheckpointValue(2);
-                        }
-                        break;
-                    case 2:
-                        if (player.getCheckpointValue() == 2 && space1.getCheckpoint().getCheckpointnumber() == 3) {
-                            player.setCheckpointValue(3);
-                        }
-                        break;
-                    case 3:
-                        if (player.getCheckpointValue() == 3 && space1.getCheckpoint().getCheckpointnumber() == 4) {
-                            player.setCheckpointValue(4);
-                        }
-                        break;
-                    case 4:
-                        if (player.getCheckpointValue() == 4 && space1.getCheckpoint().getCheckpointnumber() == 5) {
-                            player.setCheckpointValue(5);
-                        }
-                        break;
-                    case 5:
-                        if (player.getCheckpointValue() == 5 && space1.getCheckpoint().getCheckpointnumber() == 6) {
-                            player.setCheckpointValue(6);
-                        }
-                        break;
-                }
-
-
-
-            }
-
-            if (space1 != null && space1.getPlayer() == null) {
-                player.setSpace(space1);
-                if (space1.getConveyerbelt() != null) {
-                    Space space2 = board.getNeighbour(space1, space1.getConveyerbelt().getHeading());
-                    moveCurrentPlayerToSpace(space2);
-                }
-            } else if (space1 != null && space1.getPlayer() != null) {
+        if (player.board == board) {
+            Space space = player.getSpace();
+            Heading heading = player.getHeading();
+            Space target = board.getNeighbour(space, heading);
+            if (target != null) {
                 try {
-                    moveToSpace(player, space, heading);
-                    player.setSpace(space1);
+                    moveToSpace(player, target, heading);
+                    player.setSpace(target);
                 } catch (ImpossibleMoveException e) {
-                    throw new RuntimeException(e);
                 }
             }
-
-            if (space.getWall() != null) {
-                if (wallcurrentspace.getHeading() == player.getHeading()) {
-                    player.setSpace(space);
-
-                }
-            }
-            if (space1.getWall() != null) {
-                if (wallspacetarget.getHeading() == heading4) {
-                    player.setSpace(space);
-                }
-            }
-
         }
     }
+
 
 
     // TODO Assignment V2
@@ -497,15 +420,10 @@ public class GameController {
         if (backSpace != null && backSpace.getPlayer() == null && backSpace.getWall() == null) {
             player.setSpace(backSpace); // Flytter spilleren til det bagvedliggende felt
 
-            // Hvis det bagvedliggende felt har et Conveyerbelt, håndter det her
-            if (backSpace.getConveyerbelt() != null) {
-                Space nextSpace = board.getNeighbour(backSpace, backSpace.getConveyerbelt().getHeading());
-                if (nextSpace != null && nextSpace.getPlayer() == null) {
-                    player.setSpace(nextSpace); // Flytter spilleren til det næste felt i Conveyerbeltets retning
-                }
+
             }
         }
-    }
+
 
 
     public boolean moveCards(@NotNull CommandCardField source, @NotNull CommandCardField target) {
