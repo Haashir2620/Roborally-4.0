@@ -22,7 +22,7 @@ public class Connector {
     private static final int PORT = 3306;
 
     //DATABASE er navnet på den specifikke database, der skal interageres med
-    private static final String DATABASE = "roborally2_0";
+    private static final String DATABASE = "roborally";
 
     //USERNAME og PASSWORD er legitimationsoplysninger, der bruges til at oprette forbindelse til databasen.
     private static final String USERNAME = "root";
