@@ -77,6 +77,7 @@ public class Repository implements IRepository {
                 ps.setNull(2, Types.TINYINT); // game.getPlayerNumber(game.getCurrentPlayer())); is inserted after players!
                 ps.setInt(3, game.getPhase().ordinal());
                 ps.setInt(4, game.getStep());
+                //tilføj at boardname også gemmes
                 int affectedRows = ps.executeUpdate();
                 //koden ovenfor sikrer spillets detaljer bliver korrekt indsat i databasen
                 ResultSet generatedKeys = ps.getGeneratedKeys();

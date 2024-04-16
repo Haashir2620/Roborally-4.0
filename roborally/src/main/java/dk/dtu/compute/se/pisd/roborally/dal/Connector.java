@@ -26,7 +26,7 @@ public class Connector {
 
     //USERNAME og PASSWORD er legitimationsoplysninger, der bruges til at oprette forbindelse til databasen.
     private static final String USERNAME = "root";
-    private static final String PASSWORD = "";
+    private static final String PASSWORD = "Rep68hfq";
 
     //DELIMITER er tegnet, der bruges til at adskille individuelle SQL-kommandoer i en streng med flere kommandoer.
     private static final String DELIMITER = ";";
@@ -43,7 +43,7 @@ public class Connector {
             String url = "jdbc:mysql://" + HOST + ":" + PORT + "/" + DATABASE + "?serverTimezone=UTC";
             connection = DriverManager.getConnection(url, USERNAME, PASSWORD);
 
-            createDatabaseSchema();
+            //createDatabaseSchema();
         } catch (SQLException e) {
 
             e.printStackTrace();
@@ -57,7 +57,7 @@ public class Connector {
     private void createDatabaseSchema() {
 
         String createTablesStatement =
-                IOUtil.readResource("schemas/createschema.sql");
+                IOUtil.readResource("C:\\Users\\Haashir Khan\\Roborally-4.0\\roborally\\src\\main\\resources\\schemas\\createschema.sql");
 
         try {
             connection.setAutoCommit(false);
