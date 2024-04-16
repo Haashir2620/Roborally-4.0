@@ -272,4 +272,12 @@ public class Board extends Subject {
         notifyChange();
     }
 
+    public Space getRandomSpace() {
+        int x = (int) (Math.random()* width);
+        int y = (int) (Math.random()* height);
+        return getSpace(x,y);
+
+
+
+    }
 }
